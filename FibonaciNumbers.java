@@ -3,7 +3,7 @@ package fibonacinumbers;
 
 /**
  *
- * @author GRK
+ * @author Rolf Kinder Gilet 
  */
 public class FibonaciNumbers {
 
