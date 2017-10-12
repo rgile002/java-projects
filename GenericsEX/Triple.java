@@ -2,7 +2,7 @@ package generics.ex;
 
 /**
  *
- * @author GRK
+ * @author Rolf Kinder Gilet
  */
 public class Triple<E extends Comparable<? super E>> {
 
