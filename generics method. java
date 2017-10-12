@@ -1,18 +1,10 @@
-/* COURSE      : COP 3337
- * Section     : U05
- * Semester    : Spring 2016
- * Instructor  : Alex Pelin
+/* 
  * Author      : Rolf Kinder Gilet
  * Assignment #: Prolem 4
  * Description : we have to write 6 Generics methods, which are: delete,
  *               min, sublist, isSorted, deleteReps, union
- *               
- *               
- *
- *  I certify that the work is my own and did not consult with
- *  anyone.
- *                                     (Gilet Rolf Kinder)
- */
+ */               
+
 package problem.pkg4;
 // the collection class was not use in the 6 Generics methods 
 import java.util.Collections;
