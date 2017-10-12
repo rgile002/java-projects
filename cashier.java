@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
  * @author Rolf Kinder Gilet
  *
  */
-public class cashier {
+public class Cashier {
 
     public static void main(String[] args) {
 
