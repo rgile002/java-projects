@@ -1,0 +1,597 @@
+/* COURSE      : COP 3337
+ * Section     : U05
+ * Semester    : Spring 2016
+ * Instructor  : Alex Pelin
+ * Author      : Rolf Kinder Gilet
+ * Assignment #: Prolem 4
+ * Description : we have to write 6 Generics methods, which are: delete,
+ *               min, sublist, isSorted, deleteReps, union
+ *               
+ *               
+ *
+ *  I certify that the work is my own and did not consult with
+ *  anyone.
+ *                                     (Gilet Rolf Kinder)
+ */
+package problem.pkg4;
+// the collection class was not use in the 6 Generics methods 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+
+public class Lists {
+
+    // sort list in increasing order
+    public static <T extends Comparable<? super T>>
+            void sort(LinkedList<T> list) {
+
+        Collections.sort(list);
+    }
+
+    // reverse
+    // sort list in increasing order
+    public static <T extends Comparable<? super T>>
+            void reverse(LinkedList<T> list) {
+
+        Collections.reverse(list);
+    }
+
+    // list is not null
+    // list is sorted in increasing order
+    // if x is not in the list, insert it in its proper place
+    // and return true
+    // if x is in the list, return false
+    public static <T extends Comparable<? super T>>
+            boolean insert(T x, LinkedList<T> list) {
+        // form an iterator
+        ListIterator<T> ite = list.listIterator();
+        // advance to the end of the list or to the first item >= x
+        while (ite.hasNext()) {
+            T current = ite.next();
+            if (current.equals(x)) {
+                return false;
+            }
+            if (current.compareTo(x) > 0) {
+                // go back
+                ite.previous();
+                break;
+            }
+        }
+        // insert here
+        ite.add(x);
+        return true;
+    }
+
+    // delete all items between low and high
+    // including low and high from list
+    // do not assume that list is sorted
+    // return a NoSuchElement exception if the list
+    // is null or empty
+    public static <T extends Comparable<? super T>>
+            void delete(LinkedList<T> list, T low, T high) {
+        // return a NoSuchElementException
+        // for null or empty list                
+        if (list == null || list.isEmpty()) {
+            throw new NoSuchElementException();
+        } // form an iterator for list
+        ListIterator<T> ite = list.listIterator();
+        // remove all null 
+        if (low == null && high == null) {
+            // iterate from first to last element 
+            // of the list
+            while (ite.hasNext()) {
+                // get and asign the next element of list
+                // to variable element
+                T element = ite.next();
+                // check for null element             
+                if (element == null) {
+                    // remove null element
+                    ite.remove();
+                }// end if
+            }// end while loop
+            return;// end case
+        }
+        // remove null and high
+        if (low == null && high != null) {
+            // iterate from first to last element 
+            // of the list
+            while (ite.hasNext()) {
+                // get and asign the next element of list
+                // to variable element
+                T element = ite.next();
+                // check for null and for elements equal to high
+                if (element == null || element.compareTo(high) == 0) {
+                    // remove element
+                    ite.remove();
+                }// end if
+            }// end while loop
+            return;// end case
+        }
+        // remove null and low
+        if (low != null && high == null) {
+            // iterate from first to last element 
+            // of the list
+            while (ite.hasNext()) {
+                // get and asign the next element of list
+                // to variable element
+                T element = ite.next();
+                // check for null and for elements equal to low
+                if (element == null || element.compareTo(low) == 0) {
+                    // remove element
+                    ite.remove();
+                }// end if
+            }// end while loop
+            return;// end case
+        }
+        // check if low equal to high
+        if (low.compareTo(high) == 0) {
+            // iterate from first to last element 
+            // of the list
+            while (ite.hasNext()) {
+                // get and asign the next element of list
+                // to variable element
+                T element = ite.next();
+                // ignore null elements
+                while (element == null) {
+                    element = ite.next();
+                }
+                // check for elements equal to low
+                if (element.compareTo(low) == 0) {
+                    // remove element
+                    ite.remove();
+                }// end if
+            }// end while loop
+            return;// end case
+        }
+        // check if low is larger than high 
+        if (low.compareTo(high) > 0) {
+            // iterate from first to last element 
+            // of the list
+            while (ite.hasNext()) {
+                // get and asign the next element of list
+                // to variable element
+                T element = ite.next();
+                // ignore null elements
+                while (element == null) {
+                    element = ite.next();
+                }
+                // check for elements between and equal to high and low
+                if (element.compareTo(high) >= 0 && element.compareTo(low) <= 0) {
+                    // remove element
+                    ite.remove();
+                }// end if
+            }// end while loop
+            return;// end case
+        }
+        // last case low!=null && smaller than high!=null
+        // iterate from first to last element 
+        // of the  list
+        while (ite.hasNext()) {
+            // get and asign the next element of list
+            // to variable element
+            T element = ite.next();
+            // ignore null elements
+            while (element == null) {
+                element = ite.next();
+            }
+            // check for elements between and equal to low and high
+            if (element.compareTo(low) >= 0 && element.compareTo(high) <= 0) {
+                // remove element
+                ite.remove();
+            }// end if
+        }// end while loop
+    }// end method
+
+    // return the smallest item in list
+    // throw a no such element exception if the list
+    // is null or empty
+    public static <T extends Comparable<? super T>>
+            T min(LinkedList<T> list) {
+        // return a NoSuchElementException
+        // for null or empty list
+        if (list == null || list.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        // form an iterator for list
+        ListIterator<T> ite = list.listIterator();
+        // initialize min with the first element
+        // of the list
+        T min = ite.next();
+        // ignore null elements
+        while (min == null) {
+            min = ite.next();
+        }
+        // iterate from first to last element 
+        // of the LinkedList list
+        while (ite.hasNext()) {
+            // get and asign the next element of list
+            // to variable element
+            T element = ite.next();
+            // ignore null elemets
+            while (element == null) {
+                element = ite.next();
+            }
+            // check if element is smaller than min
+            if (element.compareTo(min) < 0) {
+                // asigne smalest element to min
+                min = element;
+            }// end if
+        }// end while loop
+        return min;// return min
+    }// end method
+
+    // return true if Sub is a sublist of sublist of list
+    // sub is a sublist of list if the items of sub occur in
+    // the same order in list. For example, a, b, c is a sublist
+    // there are 3 items with the values a, b, and c in this order
+    // in list such that a precedes a and b precedes c.
+    // throw a null pointer exceptione if either list is null
+    public static <T extends Comparable<? super T>>
+            boolean sublist(LinkedList<T> sub, LinkedList<T> list) {
+        // throw a null pointer exceptione if either list is null
+        if (sub == null || list == null) {
+            throw new NullPointerException();
+        }
+        // initialize sublist to be false
+        boolean sublist = false;
+        // return true if LinkedList sub is  empty
+        if (sub.isEmpty()) {
+            return sublist = true;
+        }
+        // return false if sub have more element than list
+        if (sub.size() > list.size()) {
+            return sublist;
+        }
+        // form an iterator for list
+        ListIterator<T> itelist = list.listIterator();
+        // form an iterator for sub
+        ListIterator<T> itesub = sub.listIterator();
+        // form variable index for sub
+        int indsub = 0;
+        // check for sublist if the list are the same size
+        if (sub.size() == list.size()) {
+            // iterate throu  sub
+            while (itesub.hasNext()) {
+                // get and asign the next index of sub
+                // to the variable indsub
+                indsub = itesub.nextIndex();
+                // get and asign the next element of sub
+                // to the variable itemsub
+                T itemsub = itesub.next();
+                // get and asign the next index of list
+                // to the variable indlist
+                int indlist = itelist.nextIndex();
+                // get and asign the next element of list
+                // to the variable itemlist            
+                T itemlist = itelist.next();
+                // accept null 
+                while (itemsub == null && itemlist == null) {
+                    // get next index of sub
+                    indsub = itesub.nextIndex();
+                    // get and asign the next element of sub
+                    // to the variable itemsub
+                    itemsub = itesub.next();
+                    // get and asign the next index of list
+                    // to the variable indlist
+                    indlist = itelist.nextIndex();
+                    // get and asign the next element of list
+                    // to the variable itemlist            
+                    itemlist = itelist.next();
+                }// check if both list do not have null at same index
+                if (itemsub == null && itemlist != null) {
+                    return sublist = false;
+                }// ccheck if both list do not have null at same index
+                if (itemsub != null && itemlist == null) {
+                    return sublist = false;
+                }// check non null elements
+                if (itemlist.compareTo(itemsub) != 0) {
+                    return sublist = false;
+                }
+            }// check if we are at the end of both list
+            // the process was successfull 
+            // sub is a sublit of list
+            if (indsub == sub.size() - 1) {
+                return true;
+            }// end if
+        }// end case
+        // get last index of sub
+        int endsub = sub.size();
+        // initialize i and j to 0
+        int j = 0;
+        int i = 0;
+        // check list with different size when sub less than list
+        for (i = 0; i < endsub - 1;) {
+            // handle the null elements 
+            if (sub.get(i) == null && list.get(j) == null) {
+                // increment index list
+                j++;
+                // increment index sub
+                i++;
+                // we find a matching sequence
+                sublist = true;
+                // check if reach end of list to avoid index out of bound
+                if (j == list.size() - 1) {
+                    return false;
+                }
+            } // handle the non null elements 
+            if (sub.get(i).compareTo(list.get(j)) == 0) {
+                // increment index sub
+                i++;
+                // increment index list
+                j++;
+                // we found a match sub list true
+                sublist = true;
+                // check if we are at the end of sub
+                if (i > sub.size() - 1) {
+                    return sublist;
+                }
+            } // handle the null elements 
+            if (sub.get(i) == null && list.get(j) != null) {
+                // increment index list
+                j++;
+                // restart sub because the sequence is broken
+                i = 0;
+                // sequence is broken
+                sublist = false;
+                // if the sequence is broken and we at 
+                // end of list return false
+                if (j == list.size() - 1) {
+                    return false;
+                }
+            } // handle the null elements 
+            if (sub.get(i) != null && list.get(j) == null) {
+                // increment index list
+                j++;
+                // restart sub because the sequence is broken
+                i = 0;
+                sublist = false;
+                if (j == list.size() - 1) {
+                    return false;
+                }
+            }
+            // handle the non null elements
+            while (sub.get(i) != null || list.get(j) != null) {
+                if (sub.get(i).compareTo(list.get(j)) == 0) {
+                    // increment index sub
+                    i++;
+                    // increment index list
+                    j++;
+                    // we found a sequence 
+                    sublist = true;
+                    // return true if the sequence was not broken 
+                    //and we at end of sub
+                    if (i > sub.size() - 1) {
+                        return sublist;
+                    }
+                }
+                if (sub.get(i).compareTo(list.get(j)) != 0) {
+                    // increment index list
+                    j++;
+                    // restart sub because the sequence is broken
+                    i = 0;
+                    //  sequence was broken
+                    sublist = false;
+                }
+                if (j > list.size() - 1) {
+                    return sublist;
+                }
+            }
+        }
+        return sublist; // return true or false
+    }// end method
+
+    // return true if list is sorted in the increasing order of T
+    // and false otherwise. Trow a null pointer exception if list is null
+    public static <T extends Comparable<? super T>>
+            boolean isSorted(LinkedList<T> list) {
+        // check for empty or null linkedList
+        if (list == null || list.isEmpty()) {
+            throw new NullPointerException();
+        }
+        // initialize issorted to be true
+        boolean isSorted = true;
+        // for an iterator for list
+        ListIterator<T> ite = list.listIterator();
+        // initialize element1 with first element of the list
+        T element1 = ite.next();
+        // ignore null elements
+        while (element1 == null) {
+            element1 = ite.next();
+        }
+        // iterate from first  
+        // to last element of list
+        while (ite.hasNext()) {
+            // get and asign the next element of list
+            // to the variable element2
+            T element2 = ite.next();
+            //ignore null elements
+            while (element2 == null) {
+                element2 = ite.next();
+            }
+            // asume list have duplicates
+            // check if element1 is less or equal 
+            // to element 2 
+            if (element1.compareTo(element2) <= 0) {
+                // asigne element2 value to element1
+                element1 = element2;
+            } else {
+                // we found element out of order
+                // return false
+                return isSorted = false;
+            }// end else
+        }// end wile loop
+        return isSorted;// return true
+    }// end method
+
+    // remove all duplicate items from list.
+    // if list is null or empty leave it unchanged
+    public static <T extends Comparable<? super T>>
+            void deleteReps(LinkedList<T> list) {
+        // if list is not null or not empty     
+        if (list != null && !list.isEmpty()) {
+            // form a LinkedList of type T newList
+            LinkedList<T> newList = new LinkedList<T>();
+            // form an iterator for newList
+            ListIterator<T> ite = newList.listIterator();
+            // initialise counter for repetitive elements to 0
+            int rep = 0;
+            // first loop, iterate from first  
+            // to last element of list
+            for (T element : list) {
+                // ignore null elements
+                if (element == null) {
+                    continue;
+                }
+                // second loop, check if newList
+                // already contains element of list
+                for (T element2 : newList) {
+                    // check if element in list is already in newList
+                    if (element.equals(element2)) {
+                        // increment counter
+                        rep++;
+                    }// end if
+                }// end second loop
+                // add element of list in newList if counter = 0
+                if (rep == 0) {
+                    // add element of list in newList
+                    ite.add(element);
+                }
+                // restart counter
+                rep = 0;
+            }// end first loop
+            // remove all element of list
+            list.clear();
+            // form an iterator for list
+            ListIterator<T> ite2 = list.listIterator();
+            // copy all elements of newList into list
+            for (T element : newList) {
+                ite2.add(element);
+            }// end for loop
+        }// end if
+    }// end method
+
+    // return the union of list1 and list2. If either
+    // list1 or list2 have no elements return a list that contains
+    // the items of the other list. The output list cannot
+    // have duplications. You may assume that neither list has duplications.
+    public static <T> LinkedList<T> union(LinkedList<T> list1,
+            LinkedList<T> list2) {
+        // return list2 if list1 is empty and list2 is not
+        if (list1.isEmpty() && !list2.isEmpty()) {
+            return list2;
+        }// return list1 if list2 is empty and list1 is not
+        if (list2.isEmpty() && !list1.isEmpty()) {
+            return list1;
+        }// return null if list1 and list2 is empty
+        if (list1.isEmpty() && list2.isEmpty()) {
+            return null;
+        }
+        // form a new LinkedList of type T newList
+        LinkedList<T> newList = new LinkedList<T>();
+        // form an iterator to copy the elements of 
+        // list1 and list2 into newList
+        ListIterator<T> ite = newList.listIterator();
+        // initialize counter for duplicates
+        int rep = 0;
+        // iterate from first  
+        // to last element of list1
+        for (T element : list1) {
+            // ignore null elements
+            if (element == null) {
+                continue;
+            }
+            // check if newList
+            // already contains element of list1
+            for (T element2 : newList) {
+                // check if element in list1 is already in newList
+                if (element.equals(element2)) {
+                    // increment counter
+                    rep++;
+                }// end if
+            }// end second loop
+            // add element of list1 in newList if counter = 0
+            if (rep == 0) {
+                // add element of list1 in newList
+                ite.add(element);
+            }
+            // restart counter
+            rep = 0;
+        } // end loop
+        // iterate from first  
+        // to last element of list2
+        for (T element : list2) {
+            // ignore null elements
+            if (element == null) {
+                continue;
+            }
+            //  check if newList
+            // already contains element of list2
+            for (T element2 : newList) {
+                // check if element in list2 is already in newList
+                if (element.equals(element2)) {
+                    // increment counter
+                    rep++;
+                }//end if
+            }// end second loop
+            // add element of list2 in newList if counter = 0
+            if (rep == 0) {
+                // add element of list2 in newList
+                ite.add(element);
+            }
+            // restart counter
+            rep = 0;
+        }// end loop
+        return newList; // return the union list
+    }// end method
+
+    public static <T> void print(LinkedList<T> list) {
+        if (list == null || list.size() == 0) {
+            System.out.println("The list is empty.");
+        } else {
+            for (T curr : list) {
+                System.out.println(curr);
+            }
+        }
+    }
+}
+
+
+
+// driver 
+
+/*
+import java.util.LinkedList;
+
+public class Problem4 {
+    public static void main(String[] args) {
+  
+         // form a sorted lit by insertion
+        System.out.println("A SORTED LIST");
+        System.out.println("=============\n\n");
+        LinkedList<Integer> f = new LinkedList();
+        LinkedList<Integer> fa = new LinkedList();
+        LinkedList<Integer> f1 = new LinkedList();
+        f.add(1);
+        f.add(null);
+        f.add(2);
+        fa.add(1);
+        fa.add(1);
+        fa.add(0);
+        fa.add(0);
+        
+        
+        
+       
+     //Lists.deleteReps(fa );
+        System.out.println( Lists.sublist(f,fa ));
+        System.out.println("We insert the names Piruli, Echisera, Marquito, ");
+        System.out.println("Papa Bill, Ali Baba, Coqueta, Shrek, Geoff the Chef.");
+
+       
+        
+    }
+    
+}
+
+*/
